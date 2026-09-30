@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KAKA - Inventory</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0f1115;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 230px;
+            height: 100vh;
+            background: #17191f;
+            border-right: 1px solid #292c33;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+
+        .nav-btn {
+            display: block;
+            width: 100%;
+            padding: 13px 15px;
+            margin-bottom: 8px;
+
+            background: transparent;
+            color: #aeb3bd;
+
+            border: none;
+            border-radius: 9px;
+
+            text-align: left;
+            font-size: 15px;
+
+            cursor: pointer;
+            text-decoration: none;
+
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #24272e;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: #ffffff;
+            color: #111111;
+            font-weight: bold;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            width: calc(100% - 30px);
+
+            background: #20232a;
+            color: #ff7777;
+        }
+
+        .logout:hover {
+            background: #2b2022;
+            color: #ff9999;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 230px;
+            padding: 40px;
+        }
+
+        .top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #858a95;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        /* ADD ITEM */
+
+        .add-box {
+            background: #17191f;
+            border: 1px solid #292c33;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .add-box h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .inputs {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 12px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+
+            background: #20232a;
+            color: white;
+
+            border: 1px solid #343841;
+            border-radius: 9px;
+
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: white;
+        }
+
+        input::placeholder {
+            color: #686d77;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-btn {
+            padding: 13px 20px;
+
+            background: white;
+            color: #111;
+
+            border-radius: 9px;
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+            background: #dddddd;
+            transform: translateY(-1px);
+        }
+
+        /* INVENTORY */
+
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .inventory-header h2 {
+            font-size: 21px;
+        }
+
+        .item-count {
+            color: #858a95;
+            font-size: 14px;
+        }
+
+        .items-container {
+            display: grid;
+            gap: 12px;
+        }
+
+        .item {
+            background: #17191f;
+            border: 1px solid #292c33;
+            border-radius: 13px;
+
+            padding: 20px;
+
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+            align-items: center;
+
+            gap: 15px;
+
+            transition: 0.2s;
+        }
+
+        .item:hover {
+            border-color: #41444d;
+            transform: translateY(-1px);
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .label {
+            display: block;
+            color: #686d77;
+            font-size: 11px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .value {
+            font-size: 14px;
+        }
+
+        .margin {
+            color: #7ee787;
+        }
+
+        .stock {
+            color: #78a9ff;
+        }
+
+        /* ACTION BUTTONS */
+
+        .actions {
+            display: flex;
+            gap: 7px;
+        }
+
+        .edit-btn,
+        .delete-btn,
+        .buy-btn {
+            padding: 9px 12px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #292c33;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #3a3e47;
+        }
+
+        .delete-btn {
+            background: #302124;
+            color: #ff7777;
+        }
+
+        .delete-btn:hover {
+            background: #432a2e;
+        }
+
+        .buy-btn {
+            background: white;
+            color: #111;
+        }
+
+        .buy-btn:hover {
+            background: #dddddd;
+        }
+
+        /* EMPTY */
+
+        .empty {
+            background: #17191f;
+            border: 1px dashed #343841;
+            border-radius: 15px;
+
+            padding: 50px;
+            text-align: center;
+
+            color: #686d77;
+        }
+
+        /* EDIT FORM */
+
+        .edit-form {
+            grid-column: 1 / -1;
+
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr auto;
+            gap: 10px;
+
+            margin-top: 10px;
+            padding-top: 15px;
+
+            border-top: 1px solid #292c33;
+        }
+
+        .save-btn {
+            background: white;
+            color: #111;
+
+            padding: 12px 18px;
+            border-radius: 8px;
+
+            font-weight: bold;
+        }
+
+        .cancel-btn {
+            background: #292c33;
+            color: white;
+
+            padding: 12px 18px;
+            border-radius: 8px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1100px) {
+            .inputs {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .add-btn {
+                width: 100%;
+            }
+
+            .item {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .actions {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 180px;
+            }
+
+            .main {
+                margin-left: 180px;
+                padding: 25px;
+            }
+
+            .inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .item {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .edit-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            KAKA
+        </div>
+
+        <a class="nav-btn" href="KAKAPROJ(home).html">
+            Home
+        </a>
+
+        <a class="nav-btn active" href="ItemsKAKA.html">
+            Inventory
+        </a>
+
+        <a class="nav-btn" href="buyKAKA.html">
+            Buy
+        </a>
+
+        <a class="nav-btn" href="sellKAKA.html">
+            Sell
+        </a>
+
+        <a class="nav-btn" href="histroyKAKA.html">
+            History
+        </a>
+
+        <button class="nav-btn logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <div class="top">
+            <div>
+                <h1>Inventory</h1>
+                <p class="subtitle">
+                    Manage your items, prices and stock
+                </p>
+            </div>
+        </div>
+
+
+        <!-- ADD ITEM -->
+
+        <div class="add-box">
+
+            <h2>Add New Item</h2>
+
+            <div class="inputs">
+
+                <input
+                    type="text"
+                    id="itemName"
+                    placeholder="Item name"
+                >
+
+                <input
+                    type="number"
+                    id="buyPrice"
+                    placeholder="Buy price"
+                    min="0"
+                    step="0.01"
+                >
+
+                <input
+                    type="number"
+                    id="sellPrice"
+                    placeholder="Sell price"
+                    min="0"
+                    step="0.01"
+                >
+
+                <input
+                    type="number"
+                    id="stock"
+                    placeholder="Stock"
+                    min="0"
+                    step="1"
+                >
+
+                <button class="add-btn" onclick="addItem()">
+                    + Add Item
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- INVENTORY LIST -->
+
+        <div class="inventory-header">
+
+            <h2>Your Items</h2>
+
+            <div class="item-count" id="itemCount">
+                0 items
+            </div>
+
+        </div>
+
+
+        <div class="items-container" id="itemsContainer"></div>
+
+    </div>
+
+
+    <script>
+
+        /* LOGIN PROTECTION */
+
+        if (localStorage.getItem("loggedIn") !== "true") {
+            location.href = "login PAGE1.html";
+        }
+
+
+        /* LOAD ITEMS */
+
+        let items = JSON.parse(localStorage.getItem("items")) || [];
+
+
+        /* DISPLAY ITEMS */
+
+        function displayItems() {
+
+            const container =
+                document.getElementById("itemsContainer");
+
+            const count =
+                document.getElementById("itemCount");
+
+            container.innerHTML = "";
+
+            count.innerHTML =
+                items.length + (items.length === 1 ? " item" : " items");
+
+
+            if (items.length === 0) {
+
+                container.innerHTML = `
+                    <div class="empty">
+                        No items in your inventory yet.
+                        <br><br>
+                        Add your first item above.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            items.forEach((item, index) => {
+
+                const margin =
+                    Number(item.sell) - Number(item.buy);
+
+
+                const div =
+                    document.createElement("div");
+
+                div.className = "item";
+
+
+                div.innerHTML = `
+
+                    <div>
+                        <span class="label">Item</span>
+                        <span class="item-name">
+                            ${item.name}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span class="label">Buy</span>
+                        <span class="value">
+                            ₹${Number(item.buy).toFixed(2)}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span class="label">Sell</span>
+                        <span class="value">
+                            ₹${Number(item.sell).toFixed(2)}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span class="label">Margin</span>
+                        <span class="value margin">
+                            ₹${margin.toFixed(2)}
+                        </span>
+                    </div>
+
+                    <div>
+                        <span class="label">Stock</span>
+                        <span class="value stock">
+                            ${item.stock}
+                        </span>
+                    </div>
+
+                    <div class="actions">
+
+                        <button
+                            class="edit-btn"
+                            onclick="editItem(${index})"
+                        >
+                            EDIT
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteItem(${index})"
+                        >
+                            DELETE
+                        </button>
+
+                        <button
+                            class="buy-btn"
+                            onclick="buyItem(${index})"
+                        >
+                            BUY
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(div);
+
+            });
+
+        }
+
+
+        /* ADD ITEM */
+
+        function addItem() {
+
+            let name =
+                document.getElementById("itemName").value.trim();
+
+            let buy =
+                Number(document.getElementById("buyPrice").value);
+
+            let sell =
+                Number(document.getElementById("sellPrice").value);
+
+            let stock =
+                Number(document.getElementById("stock").value);
+
+
+            if (name === "") {
+
+                alert("Please enter an item name.");
+
+                return;
+            }
+
+
+            if (buy < 0 || sell < 0 || stock < 0) {
+
+                alert("Values cannot be negative.");
+
+                return;
+            }
+
+
+            const newItem = {
+
+                name: name,
+
+                buy: buy,
+
+                sell: sell,
+
+                stock: stock
+
+            };
+
+
+            items.push(newItem);
+
+
+            localStorage.setItem(
+                "items",
+                JSON.stringify(items)
+            );
+
+
+            document.getElementById("itemName").value = "";
+            document.getElementById("buyPrice").value = "";
+            document.getElementById("sellPrice").value = "";
+            document.getElementById("stock").value = "";
+
+
+            displayItems();
+
+        }
+
+
+        /* EDIT ITEM */
+
+        function editItem(index) {
+
+            const item = items[index];
+
+            const newName =
+                prompt(
+                    "Enter item name:",
+                    item.name
+                );
+
+            if (newName === null) {
+                return;
+            }
+
+
+            const newBuy =
+                prompt(
+                    "Enter buy price:",
+                    item.buy
+                );
+
+            if (newBuy === null) {
+                return;
+            }
+
+
+            const newSell =
+                prompt(
+                    "Enter sell price:",
+                    item.sell
+                );
+
+            if (newSell === null) {
+                return;
+            }
+
+
+            const newStock =
+                prompt(
+                    "Enter stock:",
+                    item.stock
+                );
+
+            if (newStock === null) {
+                return;
+            }
+
+
+            if (
+                newName.trim() === "" ||
+                Number(newBuy) < 0 ||
+                Number(newSell) < 0 ||
+                Number(newStock) < 0
+            ) {
+
+                alert("Please enter valid values.");
+
+                return;
+            }
+
+
+            item.name = newName.trim();
+
+            item.buy = Number(newBuy);
+
+            item.sell = Number(newSell);
+
+            item.stock = Number(newStock);
+
+
+            localStorage.setItem(
+                "items",
+                JSON.stringify(items)
+            );
+
+
+            displayItems();
+
+        }
+
+
+        /* DELETE ITEM */
+
+        function deleteItem(index) {
+
+            const item = items[index];
+
+
+            const confirmDelete =
+                confirm(
+                    `Delete "${item.name}" from inventory?`
+                );
+
+
+            if (!confirmDelete) {
+                return;
+            }
+
+
+            items.splice(index, 1);
+
+
+            localStorage.setItem(
+                "items",
+                JSON.stringify(items)
+            );
+
+
+            displayItems();
+
+        }
+
+
+        /* BUY BUTTON */
+
+        function buyItem(index) {
+
+            location.href = "buyKAKA.html";
+
+        }
+
+
+        /* LOGOUT */
+
+        function logout() {
+
+            localStorage.removeItem("loggedIn");
+
+            location.href = "login PAGE1.html";
+
+        }
+
+
+        /* START */
+
+        displayItems();
+
+    </script>
+
+</body>
+</html>

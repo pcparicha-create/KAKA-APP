@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KAKA - Buy Stock</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0f1115;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 230px;
+            height: 100vh;
+
+            background: #17191f;
+            border-right: 1px solid #292c33;
+
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 40px;
+        }
+
+        .nav-btn {
+            display: block;
+            width: 100%;
+
+            padding: 13px 15px;
+            margin-bottom: 8px;
+
+            background: transparent;
+            color: #aeb3bd;
+
+            border: none;
+            border-radius: 9px;
+
+            text-align: left;
+            font-size: 15px;
+
+            cursor: pointer;
+            text-decoration: none;
+
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #24272e;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: #111;
+            font-weight: bold;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+
+            width: calc(100% - 30px);
+
+            background: #20232a;
+            color: #ff7777;
+        }
+
+        .logout:hover {
+            background: #2b2022;
+            color: #ff9999;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 230px;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: #858a95;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* BUY CARD */
+
+        .buy-card {
+            max-width: 650px;
+
+            background: #17191f;
+            border: 1px solid #292c33;
+            border-radius: 18px;
+
+            padding: 30px;
+        }
+
+        .buy-card h2 {
+            font-size: 21px;
+            margin-bottom: 25px;
+        }
+
+        /* FORM */
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+
+            color: #aeb3bd;
+
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        select,
+        input {
+            width: 100%;
+
+            padding: 14px;
+
+            background: #20232a;
+            color: white;
+
+            border: 1px solid #343841;
+            border-radius: 9px;
+
+            font-size: 15px;
+            outline: none;
+        }
+
+        select:focus,
+        input:focus {
+            border-color: white;
+        }
+
+        /* ITEM INFO */
+
+        .item-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+            margin-bottom: 25px;
+        }
+
+        .info-box {
+            background: #20232a;
+
+            border: 1px solid #292c33;
+            border-radius: 10px;
+
+            padding: 15px;
+        }
+
+        .info-label {
+            display: block;
+
+            color: #686d77;
+
+            font-size: 11px;
+            text-transform: uppercase;
+
+            margin-bottom: 6px;
+        }
+
+        .info-value {
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        /* TOTAL */
+
+        .total-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            padding: 18px;
+
+            background: #20232a;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+        }
+
+        .total-label {
+            color: #aeb3bd;
+        }
+
+        .total {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* BUTTON */
+
+        .buy-stock-btn {
+            width: 100%;
+
+            padding: 15px;
+
+            background: white;
+            color: #111;
+
+            border: none;
+            border-radius: 10px;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .buy-stock-btn:hover {
+            background: #dddddd;
+            transform: translateY(-2px);
+        }
+
+        .buy-stock-btn:active {
+            transform: translateY(0);
+        }
+
+        /* MESSAGE */
+
+        #message {
+            min-height: 20px;
+
+            margin-top: 15px;
+
+            text-align: center;
+
+            color: #7ee787;
+
+            font-size: 14px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 180px;
+            }
+
+            .main {
+                margin-left: 180px;
+                padding: 25px;
+            }
+
+            .item-info {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            KAKA
+        </div>
+
+        <a class="nav-btn" href="KAKAPROJ(home).html">
+            Home
+        </a>
+
+        <a class="nav-btn" href="ItemsKAKA.html">
+            Inventory
+        </a>
+
+        <a class="nav-btn active" href="buyKAKA.html">
+            Buy
+        </a>
+
+        <a class="nav-btn" href="sellKAKA.html">
+            Sell
+        </a>
+
+        <a class="nav-btn" href="histroyKAKA.html">
+            History
+        </a>
+
+        <button class="nav-btn logout" onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <h1>Buy Stock</h1>
+
+        <p class="subtitle">
+            Purchase stock and update your inventory
+        </p>
+
+
+        <div class="buy-card">
+
+            <h2>Stock Purchase</h2>
+
+
+            <!-- ITEM -->
+
+            <div class="form-group">
+
+                <label for="itemSelect">
+                    Select Item
+                </label>
+
+                <select id="itemSelect" onchange="updateItemInfo()">
+
+                    <option value="">
+                        Select an item
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ITEM INFORMATION -->
+
+            <div class="item-info">
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Buy Price
+                    </span>
+
+                    <span
+                        class="info-value"
+                        id="buyPrice"
+                    >
+                        ₹0.00
+                    </span>
+
+                </div>
+
+
+                <div class="info-box">
+
+                    <span class="info-label">
+                        Current Stock
+                    </span>
+
+                    <span
+                        class="info-value"
+                        id="currentStock"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUANTITY -->
+
+            <div class="form-group">
+
+                <label for="quantity">
+                    Quantity
+                </label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    min="1"
+                    step="1"
+                    placeholder="Enter quantity"
+                    oninput="calculateTotal()"
+                >
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="total-box">
+
+                <span class="total-label">
+                    Total Cost
+                </span>
+
+                <span
+                    class="total"
+                    id="total"
+                >
+                    ₹0.00
+                </span>
+
+            </div>
+
+
+            <!-- BUY BUTTON -->
+
+            <button
+                class="buy-stock-btn"
+                onclick="buyStock()"
+            >
+                BUY STOCK
+            </button>
+
+
+            <p id="message"></p>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* LOGIN PROTECTION */
+
+        if (localStorage.getItem("loggedIn") !== "true") {
+            location.href = "login PAGE1.html";
+        }
+
+
+        /* LOAD ITEMS */
+
+        let items =
+            JSON.parse(localStorage.getItem("items")) || [];
+
+
+        /* LOAD DROPDOWN */
+
+        function loadItems() {
+
+            const select =
+                document.getElementById("itemSelect");
+
+
+            select.innerHTML = `
+                <option value="">
+                    Select an item
+                </option>
+            `;
+
+
+            items.forEach((item, index) => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = index;
+
+                option.textContent =
+                    item.name;
+
+                select.appendChild(option);
+
+            });
+
+        }
+
+
+        /* UPDATE ITEM INFORMATION */
+
+        function updateItemInfo() {
+
+            const index =
+                document.getElementById("itemSelect").value;
+
+
+            if (index === "") {
+
+                document.getElementById("buyPrice").textContent =
+                    "₹0.00";
+
+                document.getElementById("currentStock").textContent =
+                    "0";
+
+                document.getElementById("total").textContent =
+                    "₹0.00";
+
+                return;
+            }
+
+
+            const item = items[index];
+
+
+            document.getElementById("buyPrice").textContent =
+                "₹" + Number(item.buy).toFixed(2);
+
+
+            document.getElementById("currentStock").textContent =
+                item.stock;
+
+
+            calculateTotal();
+
+        }
+
+
+        /* CALCULATE TOTAL */
+
+        function calculateTotal() {
+
+            const index =
+                document.getElementById("itemSelect").value;
+
+
+            const quantity =
+                Number(document.getElementById("quantity").value);
+
+
+            if (index === "" || quantity <= 0) {
+
+                document.getElementById("total").textContent =
+                    "₹0.00";
+
+                return;
+            }
+
+
+            const item = items[index];
+
+
+            const totalCost =
+                Number(item.buy) * quantity;
+
+
+            document.getElementById("total").textContent =
+                "₹" + totalCost.toFixed(2);
+
+        }
+
+
+        /* BUY STOCK */
+
+        function buyStock() {
+
+            const index =
+                document.getElementById("itemSelect").value;
+
+
+            const quantity =
+                Number(document.getElementById("quantity").value);
+
+
+            const message =
+                document.getElementById("message");
+
+
+            message.textContent = "";
+
+
+            /* CHECK ITEM */
+
+            if (index === "") {
+
+                alert("Please select an item.");
+
+                return;
+            }
+
+
+            /* CHECK QUANTITY */
+
+            if (!Number.isInteger(quantity) || quantity <= 0) {
+
+                alert("Please enter a valid quantity.");
+
+                return;
+            }
+
+
+            const item = items[index];
+
+
+            /* CALCULATE */
+
+            const totalCost =
+                Number(item.buy) * quantity;
+
+
+            /* UPDATE STOCK */
+
+            item.stock =
+                Number(item.stock) + quantity;
+
+
+            /* SAVE ITEMS */
+
+            localStorage.setItem(
+                "items",
+                JSON.stringify(items)
+            );
+
+
+            /* UPDATE AMOUNT BOUGHT */
+
+            let amountBought =
+                Number(
+                    localStorage.getItem("amountBought")
+                ) || 0;
+
+
+            amountBought += totalCost;
+
+
+            localStorage.setItem(
+                "amountBought",
+                amountBought
+            );
+
+
+            /* CREATE TRANSACTION */
+
+            let transactions =
+                JSON.parse(
+                    localStorage.getItem("transactions")
+                ) || [];
+
+
+            transactions.push({
+
+                type: "BUY",
+
+                item: item.name,
+
+                quantity: quantity,
+
+                price: Number(item.buy),
+
+                total: totalCost,
+
+                time: new Date().toLocaleString()
+
+            });
+
+
+            /* SAVE TRANSACTIONS */
+
+            localStorage.setItem(
+                "transactions",
+                JSON.stringify(transactions)
+            );
+
+
+            /* MESSAGE */
+
+            message.textContent =
+                `Bought ${quantity} × ${item.name} successfully!`;
+
+
+            /* RESET */
+
+            document.getElementById("quantity").value = "";
+
+            updateItemInfo();
+
+        }
+
+
+        /* LOGOUT */
+
+        function logout() {
+
+            localStorage.removeItem("loggedIn");
+
+            location.href = "login PAGE1.html";
+
+        }
+
+
+        /* START */
+
+        loadItems();
+
+    </script>
+
+</body>
+</html>

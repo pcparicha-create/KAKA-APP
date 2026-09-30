@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KAKA - Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0f1115;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 230px;
+            height: 100vh;
+
+            background: #17191f;
+            border-right: 1px solid #292c33;
+
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 30px;
+            font-weight: bold;
+
+            letter-spacing: 4px;
+
+            margin-bottom: 40px;
+        }
+
+        .nav-btn {
+            display: block;
+
+            width: 100%;
+
+            padding: 13px 15px;
+
+            margin-bottom: 8px;
+
+            background: transparent;
+
+            color: #aeb3bd;
+
+            border: none;
+
+            border-radius: 9px;
+
+            text-align: left;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+            text-decoration: none;
+        }
+
+        .nav-btn:hover {
+            background: #24272e;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: #111;
+
+            font-weight: bold;
+        }
+
+        .logout {
+            position: absolute;
+
+            bottom: 25px;
+            left: 15px;
+
+            width: calc(100% - 30px);
+
+            color: #ff7777;
+        }
+
+
+        /* MAIN */
+
+        .main {
+            margin-left: 230px;
+
+            padding: 40px;
+        }
+
+        .top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+        }
+
+        .subtitle {
+            color: #858a95;
+
+            margin-top: 7px;
+
+            font-size: 14px;
+        }
+
+
+        /* MONTH BOX */
+
+        .month-box {
+            background: #17191f;
+
+            border: 1px solid #292c33;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            margin-bottom: 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .month-title {
+            color: #858a95;
+
+            font-size: 13px;
+
+            margin-bottom: 7px;
+        }
+
+        .month-name {
+            font-size: 24px;
+
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: white;
+
+            color: #111;
+
+            border: none;
+
+            padding: 13px 20px;
+
+            border-radius: 9px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: #ddd;
+        }
+
+        #saveMessage {
+            margin-top: 8px;
+
+            text-align: right;
+
+            font-size: 13px;
+
+            color: #7ee787;
+        }
+
+
+        /* RESET BUTTON */
+
+        .reset-section {
+            background: #17191f;
+
+            border: 1px solid #292c33;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+        }
+
+        .reset-section h2 {
+            font-size: 20px;
+
+            margin-bottom: 8px;
+        }
+
+        .reset-section p {
+            color: #858a95;
+
+            font-size: 13px;
+
+            margin-bottom: 18px;
+        }
+
+        .reset-btn {
+            background: #3a2020;
+
+            color: #ff7777;
+
+            border: 1px solid #633535;
+
+            padding: 13px 20px;
+
+            border-radius: 9px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .reset-btn:hover {
+            background: #542626;
+
+            color: #ff9999;
+        }
+
+
+        /* STATS */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #17191f;
+
+            border: 1px solid #292c33;
+
+            border-radius: 14px;
+
+            padding: 22px;
+        }
+
+        .stat-title {
+            color: #858a95;
+
+            font-size: 13px;
+
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 25px;
+
+            font-weight: bold;
+        }
+
+        .profit {
+            color: #7ee787;
+        }
+
+        .bought {
+            color: #ffb86c;
+        }
+
+        .sold {
+            color: #78a9ff;
+        }
+
+        .items {
+            color: #c792ea;
+        }
+
+
+        /* SECTIONS */
+
+        .section {
+            background: #17191f;
+
+            border: 1px solid #292c33;
+
+            border-radius: 15px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+        }
+
+        .section h2 {
+            font-size: 20px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* QUICK ACTIONS */
+
+        .actions {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+        }
+
+        .action-btn {
+            padding: 18px;
+
+            background: #20232a;
+
+            color: white;
+
+            border: 1px solid #292c33;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            text-align: center;
+
+            font-weight: bold;
+        }
+
+        .action-btn:hover {
+            background: #292c33;
+        }
+
+
+        /* MONTHLY PROFITS */
+
+        .month-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+        .month {
+            display: grid;
+
+            grid-template-columns:
+                130px
+                1fr
+                1fr
+                1fr;
+
+            gap: 15px;
+
+            align-items: center;
+
+            background: #20232a;
+
+            padding: 16px;
+
+            border-radius: 10px;
+        }
+
+        .month-name {
+            font-weight: bold;
+        }
+
+        .month-data {
+            color: #aeb3bd;
+
+            font-size: 14px;
+        }
+
+        .month-profit {
+            color: #7ee787;
+
+            font-weight: bold;
+        }
+
+        .empty {
+            color: #686d77;
+
+            text-align: center;
+
+            padding: 20px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 1000px) {
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 180px;
+            }
+
+            .main {
+                margin-left: 180px;
+
+                padding: 25px;
+            }
+
+            .top {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .month-box {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .save-btn {
+                width: 100%;
+            }
+
+            #saveMessage {
+                text-align: left;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .month {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            KAKA
+        </div>
+
+
+        <a
+            class="nav-btn active"
+            href="KAKAPROJ(home).html"
+        >
+            Home
+        </a>
+
+
+        <a
+            class="nav-btn"
+            href="ItemsKAKA.html"
+        >
+            Inventory
+        </a>
+
+
+        <a
+            class="nav-btn"
+            href="buyKAKA.html"
+        >
+            Buy
+        </a>
+
+
+        <a
+            class="nav-btn"
+            href="sellKAKA.html"
+        >
+            Sell
+        </a>
+
+
+        <a
+            class="nav-btn"
+            href="histroyKAKA.html"
+        >
+            History
+        </a>
+
+
+        <button
+            class="nav-btn logout"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+
+        <!-- HEADER -->
+
+        <div class="top">
+
+            <div>
+
+                <h1>
+                    Dashboard
+                </h1>
+
+                <p class="subtitle">
+                    KAKA Inventory Management System
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CURRENT MONTH -->
+
+        <div class="month-box">
+
+            <div>
+
+                <div class="month-title">
+                    CURRENT BUSINESS MONTH
+                </div>
+
+                <div
+                    class="month-name"
+                    id="currentMonthDisplay"
+                >
+                    Month 1 • September
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <button
+                    class="save-btn"
+                    onclick="saveMonth()"
+                >
+                    💾 SAVE MONTH & PROGRESS
+                </button>
+
+                <div id="saveMessage"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Current Month Profit
+                </div>
+
+                <div
+                    class="stat-value profit"
+                    id="profit"
+                >
+                    ₹0.00
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Current Month Bought
+                </div>
+
+                <div
+                    class="stat-value bought"
+                    id="bought"
+                >
+                    ₹0.00
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Current Month Sold
+                </div>
+
+                <div
+                    class="stat-value sold"
+                    id="sold"
+                >
+                    ₹0.00
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Items in Inventory
+                </div>
+
+                <div
+                    class="stat-value items"
+                    id="items"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <div class="section">
+
+            <h2>
+                Quick Actions
+            </h2>
+
+
+            <div class="actions">
+
+                <a
+                    class="action-btn"
+                    href="ItemsKAKA.html"
+                >
+                    📦 Inventory
+                </a>
+
+
+                <a
+                    class="action-btn"
+                    href="buyKAKA.html"
+                >
+                    🛒 Buy Stock
+                </a>
+
+
+                <a
+                    class="action-btn"
+                    href="sellKAKA.html"
+                >
+                    💰 Sell Stock
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- MONTHLY PROFITS -->
+
+        <div class="section">
+
+            <h2>
+                Monthly Profits
+            </h2>
+
+
+            <div
+                class="month-list"
+                id="monthList"
+            ></div>
+
+        </div>
+
+
+        <!-- RESET EVERYTHING -->
+
+        <div class="reset-section">
+
+            <h2>
+                Reset KAKA
+            </h2>
+
+            <p>
+                Delete all inventory, money records,
+                transactions and monthly progress.
+            </p>
+
+
+            <button
+                class="reset-btn"
+                onclick="resetEverything()"
+            >
+                🗑️ RESET EVERYTHING
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+    <script>
+
+
+        /* LOGIN PROTECTION */
+
+        if (
+            localStorage.getItem("loggedIn")
+            !== "true"
+        ) {
+
+            location.href =
+                "login PAGE1.html";
+
+        }
+
+
+        /* LOAD DATA */
+
+        let items =
+            JSON.parse(
+                localStorage.getItem("items")
+            ) || [];
+
+
+        let amountBought =
+            Number(
+                localStorage.getItem(
+                    "amountBought"
+                )
+            ) || 0;
+
+
+        let amountSold =
+            Number(
+                localStorage.getItem(
+                    "amountSold"
+                )
+            ) || 0;
+
+
+        let monthlyProfits =
+            JSON.parse(
+                localStorage.getItem(
+                    "monthlyProfits"
+                )
+            ) || [];
+
+
+        /* STARTING MONTH */
+
+        let startingMonth =
+            localStorage.getItem(
+                "startingMonth"
+            );
+
+
+        if (startingMonth === null) {
+
+            startingMonth =
+                new Date().getMonth();
+
+            localStorage.setItem(
+                "startingMonth",
+                startingMonth
+            );
+
+        }
+        else {
+
+            startingMonth =
+                Number(startingMonth);
+
+        }
+
+
+        /* CURRENT MONTH */
+
+        let currentMonth =
+            Number(
+                localStorage.getItem(
+                    "currentMonth"
+                )
+            );
+
+
+        if (!currentMonth) {
+
+            currentMonth = 1;
+
+            localStorage.setItem(
+                "currentMonth",
+                currentMonth
+            );
+
+        }
+
+
+        /* MONTH NAMES */
+
+        const months = [
+
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+
+        ];
+
+
+        /* GET MONTH NAME */
+
+        function getMonthName() {
+
+            const index =
+                (
+                    startingMonth
+                    +
+                    currentMonth
+                    -
+                    1
+                )
+                % 12;
+
+
+            return months[index];
+
+        }
+
+
+        /* DISPLAY CURRENT MONTH */
+
+        function displayCurrentMonth() {
+
+            document.getElementById(
+                "currentMonthDisplay"
+            ).textContent =
+
+                "Month "
+                +
+                currentMonth
+                +
+                " • "
+                +
+                getMonthName();
+
+        }
+
+
+        /* UPDATE DASHBOARD */
+
+        function updateDashboard() {
+
+
+            const profit =
+                amountSold -
+                amountBought;
+
+
+            document.getElementById(
+                "profit"
+            ).textContent =
+
+                "₹"
+                +
+                profit.toFixed(2);
+
+
+            document.getElementById(
+                "bought"
+            ).textContent =
+
+                "₹"
+                +
+                amountBought.toFixed(2);
+
+
+            document.getElementById(
+                "sold"
+            ).textContent =
+
+                "₹"
+                +
+                amountSold.toFixed(2);
+
+
+            document.getElementById(
+                "items"
+            ).textContent =
+                items.length;
+
+
+            displayCurrentMonth();
+
+            displayMonthlyProfits();
+
+        }
+
+
+        /* DISPLAY MONTHLY PROFITS */
+
+        function displayMonthlyProfits() {
+
+            const list =
+                document.getElementById(
+                    "monthList"
+                );
+
+
+            list.innerHTML = "";
+
+
+            if (
+                monthlyProfits.length === 0
+            ) {
+
+                list.innerHTML = `
+
+                    <div class="empty">
+                        No saved months yet.
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            const records =
+                [...monthlyProfits].reverse();
+
+
+            records.forEach(
+                record => {
+
+                    const div =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    div.className =
+                        "month";
+
+
+                    div.innerHTML = `
+
+                        <div class="month-name">
+
+                            Month
+                            ${record.monthNumber}
+
+                            <br>
+
+                            ${record.monthName}
+
+                        </div>
+
+
+                        <div class="month-data">
+
+                            Bought:
+                            ₹${Number(
+                                record.bought
+                            ).toFixed(2)}
+
+                        </div>
+
+
+                        <div class="month-data">
+
+                            Sold:
+                            ₹${Number(
+                                record.sold
+                            ).toFixed(2)}
+
+                        </div>
+
+
+                        <div class="month-profit">
+
+                            Profit:
+                            ₹${Number(
+                                record.profit
+                            ).toFixed(2)}
+
+                        </div>
+
+                    `;
+
+
+                    list.appendChild(div);
+
+                }
+            );
+
+        }
+
+
+        /* SAVE MONTH */
+
+        function saveMonth() {
+
+
+            /*
+                Get the latest data
+                from localStorage.
+            */
+
+            items =
+                JSON.parse(
+                    localStorage.getItem(
+                        "items"
+                    )
+                ) || [];
+
+
+            amountBought =
+                Number(
+                    localStorage.getItem(
+                        "amountBought"
+                    )
+                ) || 0;
+
+
+            amountSold =
+                Number(
+                    localStorage.getItem(
+                        "amountSold"
+                    )
+                ) || 0;
+
+
+            const profit =
+                amountSold -
+                amountBought;
+
+
+            /*
+                Save this month.
+            */
+
+            const monthRecord = {
+
+                monthNumber:
+                    currentMonth,
+
+                monthName:
+                    getMonthName(),
+
+                bought:
+                    amountBought,
+
+                sold:
+                    amountSold,
+
+                profit:
+                    profit
+
+            };
+
+
+            monthlyProfits.push(
+                monthRecord
+            );
+
+
+            /*
+                Save monthly history.
+            */
+
+            localStorage.setItem(
+                "monthlyProfits",
+                JSON.stringify(
+                    monthlyProfits
+                )
+            );
+
+
+            /*
+                Reset money
+                for new month.
+            */
+
+            amountBought = 0;
+
+            amountSold = 0;
+
+
+            localStorage.setItem(
+                "amountBought",
+                "0"
+            );
+
+
+            localStorage.setItem(
+                "amountSold",
+                "0"
+            );
+
+
+            /*
+                Move to next month.
+            */
+
+            currentMonth++;
+
+
+            if (
+                currentMonth > 12
+            ) {
+
+                currentMonth = 1;
+
+            }
+
+
+            localStorage.setItem(
+                "currentMonth",
+                currentMonth
+            );
+
+
+            /*
+                Save inventory.
+            */
+
+            localStorage.setItem(
+                "items",
+                JSON.stringify(items)
+            );
+
+
+            /*
+                Show confirmation.
+            */
+
+            document.getElementById(
+                "saveMessage"
+            ).textContent =
+                "✓ Month saved!";
+
+
+            updateDashboard();
+
+
+            setTimeout(
+                function() {
+
+                    document.getElementById(
+                        "saveMessage"
+                    ).textContent = "";
+
+                },
+                2500
+            );
+
+        }
+
+
+        /* RESET EVERYTHING */
+
+        function resetEverything() {
+
+
+            const confirmed =
+                confirm(
+
+                    "⚠️ RESET EVERYTHING?\n\n"
+
+                    +
+
+                    "This will permanently delete:\n"
+
+                    +
+
+                    "• All inventory\n"
+
+                    +
+
+                    "• All buy records\n"
+
+                    +
+
+                    "• All sell records\n"
+
+                    +
+
+                    "• Transaction history\n"
+
+                    +
+
+                    "• Monthly profits\n"
+
+                    +
+
+                    "• Current month progress\n\n"
+
+                    +
+
+                    "Your PIN will NOT be deleted.\n\n"
+
+                    +
+
+                    "Are you sure?"
+
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            /*
+                Delete KAKA data.
+            */
+
+            localStorage.removeItem(
+                "items"
+            );
+
+
+            localStorage.removeItem(
+                "amountBought"
+            );
+
+
+            localStorage.removeItem(
+                "amountSold"
+            );
+
+
+            localStorage.removeItem(
+                "transactions"
+            );
+
+
+            localStorage.removeItem(
+                "monthlyProfits"
+            );
+
+
+            localStorage.removeItem(
+                "currentMonth"
+            );
+
+
+            localStorage.removeItem(
+                "startingMonth"
+            );
+
+
+            /*
+                Keep login and PIN.
+            */
+
+            alert(
+                "Everything has been reset!"
+            );
+
+
+            /*
+                Reload Home.
+            */
+
+            location.reload();
+
+        }
+
+
+        /* LOGOUT */
+
+        function logout() {
+
+            localStorage.removeItem(
+                "loggedIn"
+            );
+
+
+            location.href =
+                "login PAGE1.html";
+
+        }
+
+
+        /* START */
+
+        updateDashboard();
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KAKA - History</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0f1115;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+
+            width: 230px;
+            height: 100vh;
+
+            background: #17191f;
+            border-right: 1px solid #292c33;
+
+            padding: 25px 15px;
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 30px;
+            font-weight: bold;
+            letter-spacing: 4px;
+
+            margin-bottom: 40px;
+        }
+
+        .nav-btn {
+            display: block;
+
+            width: 100%;
+
+            padding: 13px 15px;
+            margin-bottom: 8px;
+
+            background: transparent;
+            color: #aeb3bd;
+
+            border: none;
+            border-radius: 9px;
+
+            text-align: left;
+            font-size: 15px;
+
+            cursor: pointer;
+            text-decoration: none;
+
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: #24272e;
+            color: white;
+        }
+
+        .nav-btn.active {
+            background: white;
+            color: #111;
+            font-weight: bold;
+        }
+
+        .logout {
+            position: absolute;
+
+            bottom: 25px;
+            left: 15px;
+
+            width: calc(100% - 30px);
+
+            background: #20232a;
+            color: #ff7777;
+        }
+
+        .logout:hover {
+            background: #2b2022;
+            color: #ff9999;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 230px;
+            padding: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            color: #858a95;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        /* HEADER */
+
+        .history-header {
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .history-header h2 {
+            font-size: 21px;
+        }
+
+        .transaction-count {
+            color: #858a95;
+            font-size: 14px;
+        }
+
+        /* TRANSACTIONS */
+
+        .history-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .transaction {
+            background: #17191f;
+
+            border: 1px solid #292c33;
+
+            border-radius: 13px;
+
+            padding: 18px 20px;
+
+            display: grid;
+
+            grid-template-columns:
+                90px
+                2fr
+                1fr
+                1fr
+                1.2fr
+                auto;
+
+            align-items: center;
+
+            gap: 15px;
+
+            transition: 0.2s;
+        }
+
+        .transaction:hover {
+            border-color: #41444d;
+            transform: translateY(-1px);
+        }
+
+        /* BUY / SELL */
+
+        .transaction.buy {
+            border-left: 4px solid #7ee787;
+        }
+
+        .transaction.sell {
+            border-left: 4px solid #78a9ff;
+        }
+
+        .type {
+            display: inline-block;
+
+            width: fit-content;
+
+            padding: 6px 10px;
+
+            border-radius: 6px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+        }
+
+        .type.buy {
+            background: #1d3525;
+            color: #7ee787;
+        }
+
+        .type.sell {
+            background: #202f4b;
+            color: #78a9ff;
+        }
+
+        /* TEXT */
+
+        .label {
+            display: block;
+
+            color: #686d77;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 14px;
+        }
+
+        .item-name {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .total-buy {
+            color: #7ee787;
+
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .total-sell {
+            color: #78a9ff;
+
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .time {
+            color: #858a95;
+
+            font-size: 12px;
+
+            line-height: 1.4;
+        }
+
+        /* DELETE */
+
+        .delete-btn {
+            padding: 8px 11px;
+
+            background: #302124;
+            color: #ff7777;
+
+            border: none;
+            border-radius: 7px;
+
+            font-size: 11px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #432a2e;
+        }
+
+        /* EMPTY */
+
+        .empty {
+            background: #17191f;
+
+            border: 1px dashed #343841;
+
+            border-radius: 15px;
+
+            padding: 55px;
+
+            text-align: center;
+
+            color: #686d77;
+        }
+
+        .empty-title {
+            color: #aeb3bd;
+
+            font-size: 18px;
+
+            margin-bottom: 8px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 1000px) {
+
+            .transaction {
+                grid-template-columns:
+                    80px
+                    1fr
+                    1fr;
+            }
+
+            .time {
+                grid-column: span 2;
+            }
+
+            .delete-btn {
+                width: fit-content;
+            }
+        }
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 180px;
+            }
+
+            .main {
+                margin-left: 180px;
+                padding: 25px;
+            }
+
+            .transaction {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .type {
+                grid-column: span 2;
+            }
+
+            .time {
+                grid-column: span 2;
+            }
+
+            .delete-btn {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            KAKA
+        </div>
+
+        <a
+            class="nav-btn"
+            href="KAKAPROJ(home).html"
+        >
+            Home
+        </a>
+
+        <a
+            class="nav-btn"
+            href="ItemsKAKA.html"
+        >
+            Inventory
+        </a>
+
+        <a
+            class="nav-btn"
+            href="buyKAKA.html"
+        >
+            Buy
+        </a>
+
+        <a
+            class="nav-btn"
+            href="sellKAKA.html"
+        >
+            Sell
+        </a>
+
+        <a
+            class="nav-btn active"
+            href="histroyKAKA.html"
+        >
+            History
+        </a>
+
+        <button
+            class="nav-btn logout"
+            onclick="logout()"
+        >
+            Logout
+        </button>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <h1>Transaction History</h1>
+
+        <p class="subtitle">
+            View all your purchases and sales
+        </p>
+
+
+        <div class="history-header">
+
+            <h2>Transactions</h2>
+
+            <div
+                class="transaction-count"
+                id="transactionCount"
+            >
+                0 transactions
+            </div>
+
+        </div>
+
+
+        <!-- TRANSACTION LIST -->
+
+        <div
+            class="history-container"
+            id="historyContainer"
+        ></div>
+
+    </div>
+
+
+    <script>
+
+        /* LOGIN PROTECTION */
+
+        if (localStorage.getItem("loggedIn") !== "true") {
+
+            location.href = "login PAGE1.html";
+
+        }
+
+
+        /* LOAD TRANSACTIONS */
+
+        let transactions =
+            JSON.parse(
+                localStorage.getItem("transactions")
+            ) || [];
+
+
+        /* DISPLAY HISTORY */
+
+        function displayHistory() {
+
+            const container =
+                document.getElementById(
+                    "historyContainer"
+                );
+
+            const count =
+                document.getElementById(
+                    "transactionCount"
+                );
+
+
+            container.innerHTML = "";
+
+
+            count.textContent =
+                transactions.length +
+                (
+                    transactions.length === 1
+                        ? " transaction"
+                        : " transactions"
+                );
+
+
+            /* EMPTY */
+
+            if (transactions.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        <div class="empty-title">
+                            No transactions yet
+                        </div>
+
+                        <div>
+                            Your buy and sell transactions
+                            will appear here.
+                        </div>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            /*
+                Newest transaction first
+            */
+
+            const newestFirst =
+                [...transactions].reverse();
+
+
+            newestFirst.forEach(
+                (transaction, reversedIndex) => {
+
+                    /*
+                        Convert reversed index
+                        back to original index
+                    */
+
+                    const originalIndex =
+                        transactions.length -
+                        1 -
+                        reversedIndex;
+
+
+                    const div =
+                        document.createElement("div");
+
+
+                    const transactionType =
+                        transaction.type === "BUY"
+                            ? "buy"
+                            : "sell";
+
+
+                    div.className =
+                        `transaction ${transactionType}`;
+
+
+                    const total =
+                        Number(transaction.total) || 0;
+
+
+                    const price =
+                        Number(transaction.price) || 0;
+
+
+                    div.innerHTML = `
+
+                        <div>
+
+                            <span
+                                class="type ${transactionType}"
+                            >
+                                ${transaction.type}
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="label">
+                                Item
+                            </span>
+
+                            <span class="item-name">
+                                ${transaction.item}
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="label">
+                                Quantity
+                            </span>
+
+                            <span class="value">
+                                ${transaction.quantity}
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="label">
+                                Price
+                            </span>
+
+                            <span class="value">
+                                ₹${price.toFixed(2)}
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="label">
+                                Total
+                            </span>
+
+                            <span
+                                class="${
+                                    transactionType === "buy"
+                                        ? "total-buy"
+                                        : "total-sell"
+                                }"
+                            >
+                                ${
+                                    transaction.type === "BUY"
+                                        ? "+"
+                                        : "+"
+                                }₹${total.toFixed(2)}
+                            </span>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="label">
+                                Date & Time
+                            </span>
+
+                            <span class="time">
+                                ${transaction.time}
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteTransaction(${originalIndex})"
+                        >
+                            DELETE
+                        </button>
+
+                    `;
+
+
+                    container.appendChild(div);
+
+                }
+            );
+
+        }
+
+
+        /* DELETE TRANSACTION */
+
+        function deleteTransaction(index) {
+
+            const transaction =
+                transactions[index];
+
+
+            const confirmDelete =
+                confirm(
+                    `Delete this ${transaction.type.toLowerCase()} transaction from history?`
+                );
+
+
+            if (!confirmDelete) {
+
+                return;
+
+            }
+
+
+            /*
+                IMPORTANT:
+                This only removes the history record.
+
+                It does NOT change stock,
+                Total Bought or Total Sold.
+            */
+
+            transactions.splice(index, 1);
+
+
+            localStorage.setItem(
+                "transactions",
+                JSON.stringify(transactions)
+            );
+
+
+            displayHistory();
+
+        }
+
+
+        /* LOGOUT */
+
+        function logout() {
+
+            localStorage.removeItem("loggedIn");
+
+            location.href = "login PAGE1.html";
+
+        }
+
+
+        /* START */
+
+        displayHistory();
+
+    </script>
+
+</body>
+</html>

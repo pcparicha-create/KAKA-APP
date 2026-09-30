@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>KAKA - Login</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+
+        body {
+            min-height: 100vh;
+
+            background: #0f1115;
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        /* LOGIN CARD */
+
+        .login-card {
+
+            width: 380px;
+
+            padding: 40px;
+
+            background: #17191f;
+
+            border: 1px solid #292c33;
+
+            border-radius: 20px;
+
+            text-align: center;
+
+            box-shadow:
+                0 20px 50px rgba(0, 0, 0, 0.45);
+        }
+
+
+        /* LOGO */
+
+        .logo {
+
+            font-size: 42px;
+
+            font-weight: bold;
+
+            letter-spacing: 5px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .subtitle {
+
+            color: #858a95;
+
+            font-size: 14px;
+
+            margin-bottom: 35px;
+        }
+
+
+        /* TITLE */
+
+        h1 {
+
+            font-size: 24px;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* PIN INPUT */
+
+        #pin {
+
+            width: 100%;
+
+            padding: 15px;
+
+            background: #20232a;
+
+            color: white;
+
+            border: 1px solid #343841;
+
+            border-radius: 10px;
+
+            font-size: 20px;
+
+            text-align: center;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+
+        #pin:focus {
+
+            border-color: white;
+
+            background: #24272f;
+        }
+
+
+        #pin::placeholder {
+
+            color: #686d77;
+
+            font-size: 14px;
+        }
+
+
+        /* LOGIN BUTTON */
+
+        .login-btn {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 15px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: white;
+
+            color: #111;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .login-btn:hover {
+
+            transform: translateY(-2px);
+
+            background: #e5e5e5;
+        }
+
+
+        .login-btn:active {
+
+            transform: translateY(0);
+        }
+
+
+        /* MESSAGE */
+
+        #msg {
+
+            min-height: 20px;
+
+            margin-top: 15px;
+
+            font-size: 14px;
+
+            color: #ff6b6b;
+        }
+
+
+        /* DIVIDER */
+
+        .divider {
+
+            height: 1px;
+
+            background: #292c33;
+
+            margin: 25px 0;
+        }
+
+
+        /* NEW PIN */
+
+        .new-pin-btn {
+
+            background: transparent;
+
+            border: none;
+
+            color: #9da2ad;
+
+            font-size: 14px;
+
+            cursor: pointer;
+        }
+
+
+        .new-pin-btn:hover {
+
+            color: white;
+        }
+
+
+        /* FOOTER */
+
+        .footer {
+
+            margin-top: 25px;
+
+            color: #555a64;
+
+            font-size: 12px;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 500px) {
+
+            .login-card {
+
+                width: 90%;
+
+                padding: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="login-card">
+
+
+        <div class="logo">
+            KAKA
+        </div>
+
+
+        <div class="subtitle">
+            Inventory Management
+        </div>
+
+
+        <h1>
+            Welcome Back
+        </h1>
+
+
+        <input
+            type="password"
+            id="pin"
+            placeholder="Enter your PIN"
+            maxlength="4"
+        >
+
+
+        <button
+            class="login-btn"
+            onclick="checkPin()"
+        >
+            LOGIN
+        </button>
+
+
+        <p id="msg"></p>
+
+
+        <div class="divider"></div>
+
+
+        <button
+            class="new-pin-btn"
+            onclick="newpin()"
+        >
+            Set New PIN
+        </button>
+
+
+        <div class="footer">
+            KAKA Inventory System
+        </div>
+
+
+    </div>
+
+
+    <script>
+
+
+        // GET SAVED PIN
+
+        let pin = localStorage.getItem("pin");
+
+
+        // IF NO PIN EXISTS,
+        // CREATE DEFAULT PIN
+
+        if (pin === null) {
+
+            pin = "1234";
+
+            localStorage.setItem(
+                "pin",
+                pin
+            );
+
+        }
+
+
+        // LOGIN FUNCTION
+
+        function checkPin() {
+
+            let enteredPin =
+                document.getElementById("pin").value;
+
+
+            if (enteredPin == pin) {
+
+
+                // SAVE LOGIN SESSION
+
+                localStorage.setItem(
+                    "loggedIn",
+                    "true"
+                );
+
+
+                // GO TO HOME
+
+                location.href =
+                    "KAKAPROJ(home).html";
+
+            }
+
+            else {
+
+                document.getElementById("msg").innerHTML =
+                    "Incorrect PIN. Please try again.";
+
+            }
+
+        }
+
+
+        // CHANGE PIN
+
+        function newpin() {
+
+
+            let checkPin =
+                prompt("Enter current PIN:");
+
+
+            let newPin =
+                prompt("Enter new PIN:");
+
+
+            let confirmPin =
+                prompt("Confirm new PIN:");
+
+
+            // CHECK CURRENT PIN
+
+            if (checkPin != pin) {
+
+                alert(
+                    "Incorrect current PIN. Cannot set new PIN."
+                );
+
+                return;
+
+            }
+
+
+            // CHECK CONFIRMATION
+
+            if (newPin != confirmPin) {
+
+                alert(
+                    "New PIN and confirmation do not match."
+                );
+
+                return;
+
+            }
+
+
+            // CHECK LENGTH
+
+            if (
+                newPin.length < 2 ||
+                newPin.length > 4
+            ) {
+
+                alert(
+                    "PIN must be between 2 and 4 digits."
+                );
+
+                return;
+
+            }
+
+
+            // CHANGE PIN
+
+            pin = newPin;
+
+
+            // SAVE NEW PIN
+
+            localStorage.setItem(
+                "pin",
+                pin
+            );
+
+
+            document.getElementById("msg").innerHTML =
+                "New PIN set successfully.";
+
+        }
+
+
+    </script>
+
+</body>
+
+</html>
